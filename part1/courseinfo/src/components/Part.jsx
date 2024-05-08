@@ -1,4 +1,4 @@
-const Content = (props) => {
+const Part = (props) => {
   
     return (
    <>
@@ -9,4 +9,4 @@ const Content = (props) => {
     )
   }
   
-  export default Content
+  export default Part
