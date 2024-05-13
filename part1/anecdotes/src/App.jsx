@@ -32,12 +32,40 @@ const App = () => {
 
   return (
     <div>
-      {anecdotes[selected]}
-      <br/>
-      has {points[selected]} votes
-      <br/><br/>
-      <button onClick={handleVote}>vote</button>
-      <button onClick={handleClick}>next anecdote</button>
+      <div>
+        {anecdotes[selected]}
+        <br/>
+        has {points[selected] || 0} votes
+        <br/><br/>
+        <button onClick={handleVote}>vote</button>
+        <button onClick={handleClick}>next anecdote</button>
+      </div>
+      <MostVotedAnecdote anecdotes={anecdotes} points={points} />
+    </div>
+  )
+}
+
+const MostVotedAnecdote = ({ anecdotes, points }) => {
+  const getMostVotedAnecdote = () => {
+    const maxVotes = Math.max(...Object.values(points), 0)
+    const mostVotedIndex = Object.keys(points).find(key => points[key] === maxVotes)
+    return mostVotedIndex
+  }
+
+  const mostVotedIndex = getMostVotedAnecdote()
+
+  return (
+    <div>
+      <h2>Most voted anecdote</h2>
+      {mostVotedIndex !== undefined ? (
+        <div>
+          {anecdotes[mostVotedIndex]}
+          <br/>
+          has {points[mostVotedIndex]} votes
+        </div>
+      ) : (
+        <div>No votes yet</div>
+      )}
     </div>
   )
 }
