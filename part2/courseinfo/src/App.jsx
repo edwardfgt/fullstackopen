@@ -1,37 +1,13 @@
 import React from 'react'
-import ReactDOM from 'react-dom'
+import Course from "./components/Course.jsx"
 
-const Header = (props) => {
+const DisplayCourses = ({courses}) => {
   return (
-    <h1>{props.course}</h1>
-  )
-}
-
-const Part = (props) => {
-  return (
-    <p>
-      {props.part} {props.exercises}
-    </p>
-  )
-}
-
-const Content = ({parts}) => {
-  return (
-    <div>
-    {parts.map((part) => {
-      return (
-        <Part part={part.name} exercises={part.exercises} key={part.id} />
-      )
+    <>
+    {courses.map(course => {
+      return <Course course={course} key={course.id}/>
     })}
-    </div>
-
-  )
-}
-
-const Total = ({parts}) => {
-  let total = parts.reduce((sum, part) => sum + part.exercises, 0);
-  return (
-    <p>Number of exercises {total}</p>
+    </>
   )
 }
 
@@ -76,32 +52,17 @@ const App = () => {
           name: 'Middlewares',
           exercises: 7,
           id: 2
+        },
+        {
+          name: 'test',
+          exercises: 1,
+          id: 3
         }
       ]
     }
   ]
 
   return <DisplayCourses courses={courses} />
-}
-
-const Course = ({course}) => {
-  return (
-    <div>
-      <Header course={course.name} />
-      <Content parts={course.parts}/>
-      <Total parts={course.parts}/>
-    </div>
-  )
-}
-
-const DisplayCourses = ({courses}) => {
-  return (
-    <>
-    {courses.map(course => {
-      return <Course course={course} key={course.id}/>
-    })}
-    </>
-  )
 }
 
 export default App;
