@@ -14,7 +14,12 @@ const App = () => {
   const addNewContact = (event) => {
     event.preventDefault()
     let newPersons = persons.concat({name: newName})
-    setPersons(newPersons);
+    const nameExists = persons.some(person => person.name === newName);
+    if(nameExists){
+      alert(`${newName} is already added to phonebook`)
+    } else {
+      setPersons(newPersons);
+    }
   }
   
 
