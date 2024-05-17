@@ -12,10 +12,34 @@ const Search = ({ setFilter }) => {
   );
 };
 
+const PersonForm = ({addNewContact, newName, newNumber, handleContactChange, handleNumberChange}) => {
+
+  return (
+    <form onSubmit={addNewContact}>
+        <div>
+          name: <input value={newName} onChange={handleContactChange} />
+          number: <input value={newNumber} onChange={handleNumberChange} />
+        </div>
+        <div>
+          <button type="submit">add</button>
+        </div>
+      </form>
+  )
+}
+
+const Persons = ({filteredPersons}) => {
+  return (
+    <>
+    {filteredPersons.map(person => (
+      <p key={person.number}>{person.name} {person.number}</p>
+    ))}
+    </>
+  )
+}
+
 const App = () => {
   const [persons, setPersons] = useState([
     { name: 'Arto Hellas', number: 22213141 },
-    // Add more persons as needed
   ]);
 
   const [filteredPersons, setFilteredPersons] = useState(persons);
@@ -57,19 +81,10 @@ const App = () => {
       <h2>Phonebook</h2>
       <Search setFilter={setFilter} />
       <h2>Add a new</h2>
-      <form onSubmit={addNewContact}>
-        <div>
-          name: <input value={newName} onChange={handleContactChange} />
-          number: <input value={newNumber} onChange={handleNumberChange} />
-        </div>
-        <div>
-          <button type="submit">add</button>
-        </div>
-      </form>
+
+      <PersonForm addNewContact={addNewContact} newName={newName} newNumber={newNumber} handleContactChange={handleContactChange} handleNumberChange={handleNumberChange}/>
       <h2>Numbers</h2>
-      {filteredPersons.map(person => (
-        <p key={person.number}>{person.name} {person.number}</p>
-      ))}
+      <Persons filteredPersons={filteredPersons}/>
     </div>
   );
 };
