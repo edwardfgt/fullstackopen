@@ -29,11 +29,28 @@ const PersonForm = ({addNewContact, newName, newNumber, handleContactChange, han
   )
 }
 
-const Persons = ({filteredPersons}) => {
+const Persons = ({filteredPersons, setPersons}) => {
+
+  const deleteContact = (id, name) => {
+
+    if(window.confirm(`delete ${name}?`))
+    {
+    personService.remove(id).then(response => {
+      setPersons(persons => persons.filter(person => person.id !== id));
+    }).catch(error => {
+      console.error('Delete failed:', error);
+    });
+  }
+  };
+
   return (
     <>
     {filteredPersons.map(person => (
-      <p key={person.number}>{person.name} {person.number}</p>
+      <p key={person.number}>
+        {person.name} 
+        {person.number} 
+        <button onClick={() => deleteContact(person.id, person.name)}>delete</button>
+      </p>
     ))}
     </>
   )
@@ -97,7 +114,7 @@ const App = () => {
 
       <PersonForm addNewContact={addNewContact} newName={newName} newNumber={newNumber} handleContactChange={handleContactChange} handleNumberChange={handleNumberChange}/>
       <h2>Numbers</h2>
-      <Persons filteredPersons={filteredPersons}/>
+      <Persons filteredPersons={filteredPersons} setPersons={setPersons}/>
     </div>
   );
 };
