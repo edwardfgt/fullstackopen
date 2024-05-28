@@ -30,7 +30,6 @@ const PersonForm = ({addNewContact, newName, newNumber, handleContactChange, han
 }
 
 const Persons = ({filteredPersons, setPersons}) => {
-
   const deleteContact = (id, name) => {
 
     if(window.confirm(`delete ${name}?`))
@@ -58,7 +57,6 @@ const Persons = ({filteredPersons, setPersons}) => {
 
 const App = () => {
   const [persons, setPersons] = useState([]);
-
   const [filteredPersons, setFilteredPersons] = useState(persons);
   const [newName, setNewName] = useState('');
   const [newNumber, setNewNumber] = useState('');
@@ -91,9 +89,19 @@ const App = () => {
 
   const addNewContact = (event) => {
     event.preventDefault();
-    const nameExists = persons.some(person => person.name === newName);
-    if (nameExists) {
-      alert(`${newName} is already added to phonebook`);
+    const existingPerson = persons.find(person => person.name === newName);
+    if (existingPerson) {
+      if(window.confirm(`${newName} is already added to the phonebook, replace the old number with a new one?`)){
+        const updatedPerson = { ...existingPerson, number: newNumber };
+        personService
+          .update(existingPerson.id, updatedPerson)
+          .then(response => {
+            setPersons(persons.map(person => person.id !== existingPerson.id ? person : response.data));
+          })
+          .catch(error => {
+            alert(`Failed to update contact: ${error}`);
+          });
+      }
     } else {
       const newPerson = { name: newName, number: newNumber };
       personService
@@ -102,9 +110,13 @@ const App = () => {
           setPersons(persons.concat(response.data));
           setNewName('');
           setNewNumber('');
+        })
+        .catch(error => {
+          alert(`Failed to add contact: ${error}`);
         });
     }
   };
+  
 
   return (
     <div>
