@@ -14,8 +14,30 @@ const Search = ({ setFilter }) => {
   );
 };
 
-const PersonForm = ({addNewContact, newName, newNumber, handleContactChange, handleNumberChange}) => {
+const Notification = ({ message }) => {
 
+  const successStyle = {
+    color: 'green',
+    background: 'lightgrey',
+    fontSize: 20,
+    borderStyle: 'solid',
+    borderRadius: 5,
+    padding: 10,
+    marginBottom: 10
+  }
+
+  if (message === null) {
+    return null
+  }
+
+  return (
+    <div style={successStyle}>
+      {message}
+    </div>
+  )
+}
+
+const PersonForm = ({addNewContact, newName, newNumber, handleContactChange, handleNumberChange}) => {
   return (
     <form onSubmit={addNewContact}>
         <div>
@@ -61,6 +83,7 @@ const App = () => {
   const [newName, setNewName] = useState('');
   const [newNumber, setNewNumber] = useState('');
   const [filter, setFilter] = useState('');
+  const [message, setMessage] = useState(null)
 
   useEffect(() => {
     setFilteredPersons(
@@ -97,6 +120,10 @@ const App = () => {
           .update(existingPerson.id, updatedPerson)
           .then(response => {
             setPersons(persons.map(person => person.id !== existingPerson.id ? person : response.data));
+            setMessage(`${updatedPerson.name} was updated successfully`)
+            setTimeout(() => {
+              setMessage(null);
+            }, 5000);
           })
           .catch(error => {
             alert(`Failed to update contact: ${error}`);
@@ -110,6 +137,10 @@ const App = () => {
           setPersons(persons.concat(response.data));
           setNewName('');
           setNewNumber('');
+          setMessage(`${newPerson.name} was added successfully`)
+            setTimeout(() => {
+              setMessage(null);
+            }, 5000);
         })
         .catch(error => {
           alert(`Failed to add contact: ${error}`);
@@ -121,6 +152,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message={message} />
       <Search setFilter={setFilter} />
       <h2>Add a new</h2>
 
