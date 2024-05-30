@@ -126,8 +126,14 @@ const App = () => {
             }, 5000);
           })
           .catch(error => {
-            alert(`Failed to update contact: ${error}`);
-          });
+            console.log(`Failed to update contact: ${error}`);
+            setMessage(`${updatedPerson.name} was already deleted from the db`)
+            setTimeout(() => {
+              setMessage(null);
+            }, 5000);
+            setPersons(persons.filter(person => person.id !== updatedPerson.id));
+            setFilteredPersons(filteredPersons.filter(person => person.id !== updatedPerson.id));
+        })
       }
     } else {
       const newPerson = { name: newName, number: newNumber };
