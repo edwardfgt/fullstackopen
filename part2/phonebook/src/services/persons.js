@@ -1,16 +1,16 @@
 import axios from "axios";
-const baseUrl = "http://localhost:3001/persons";
+const baseUrl = "http://localhost:3001/api";
 
 const getAll = () => {
-  return axios.get(baseUrl);
+  return axios.get(`${baseUrl}/persons`);
 };
 
 const create = (newObject) => {
-  return axios.post(baseUrl, newObject);
+  return axios.post(`${baseUrl}/persons`, newObject);
 };
 
 const remove = (id) => {
-  return axios.delete(`${baseUrl}/${id}`);
+  return axios.delete(`${baseUrl}/persons/${id}`);
 };
 
 const update = (id, updatedObject) => {
